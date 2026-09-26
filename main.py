@@ -7,7 +7,8 @@ from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
-# CORS(app, resources={r"/*": {"origins": "https://ascentairways.uz"}})
+# Explicitly allow ALL origins (*) on ALL routes (/*)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 limiter = Limiter(get_remote_address, app=app, default_limits=[])
 
@@ -15,17 +16,11 @@ RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 TO_EMAIL = os.getenv("TO_EMAIL")
 FROM_EMAIL = os.getenv("FROM_EMAIL")
 
-ALLOWED_ORIGIN = "ascentairways.uz"
-
 
 @app.route('/send-email', methods=['POST'])
 @limiter.limit("5 per hour")
 def send_email():
     
-    # origin = request.headers.get('Origin', '')
-    # if ALLOWED_ORIGIN not in origin:
-    #     return jsonify({"error": "Forbidden"}), 403
-
     data = request.get_json()
     if not data:
         return jsonify({"error": "Invalid or missing JSON payload"}), 400
@@ -135,7 +130,7 @@ def send_email():
         
         <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;">
         <p style="color: #999999; font-size: 12px;">
-          Sent automatically from the ascentairways.uz contact form.
+          Sent automatically from the contact form.
         </p>
       </div>
     </div>
