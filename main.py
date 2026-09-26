@@ -7,7 +7,7 @@ from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": "https://ascentairways.uz"}})
+# CORS(app, resources={r"/*": {"origins": "https://ascentairways.uz"}})
 
 limiter = Limiter(get_remote_address, app=app, default_limits=[])
 
@@ -22,9 +22,9 @@ ALLOWED_ORIGIN = "ascentairways.uz"
 @limiter.limit("5 per hour")
 def send_email():
     
-    origin = request.headers.get('Origin', '')
-    if ALLOWED_ORIGIN not in origin:
-        return jsonify({"error": "Forbidden"}), 403
+    # origin = request.headers.get('Origin', '')
+    # if ALLOWED_ORIGIN not in origin:
+    #     return jsonify({"error": "Forbidden"}), 403
 
     data = request.get_json()
     if not data:
